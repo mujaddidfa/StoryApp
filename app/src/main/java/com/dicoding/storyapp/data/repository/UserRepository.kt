@@ -1,4 +1,4 @@
-package com.dicoding.storyapp.data
+package com.dicoding.storyapp.data.repository
 
 import com.dicoding.storyapp.data.pref.UserModel
 import com.dicoding.storyapp.data.pref.UserPreference

@@ -7,11 +7,18 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.dicoding.storyapp.data.api.ApiConfig
+import com.dicoding.storyapp.data.Result
 import com.dicoding.storyapp.databinding.ActivitySignupBinding
 
 class SignupActivity : AppCompatActivity() {
+    private val signupViewModel: SignupViewModel by viewModels {
+        SignupViewModelFactory(this, ApiConfig.getApiService())
+    }
+
     private lateinit var binding: ActivitySignupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,16 +46,40 @@ class SignupActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.signupButton.setOnClickListener {
+            val name = binding.nameEditText.text.toString()
             val email = binding.emailEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
 
-            AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
-                setPositiveButton("Lanjut") { _, _ ->
-                    finish()
+            signupViewModel.register(name, email, password).observe(this) { result ->
+                when (result) {
+                    is Result.Loading -> {
+                        showLoading(true)
+                    }
+
+                    is Result.Success -> {
+                        showLoading(false)
+                        AlertDialog.Builder(this).apply {
+                            setTitle("Yeah!")
+                            setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
+                            setPositiveButton("Lanjut") { _, _ ->
+                                finish()
+                            }
+                            create()
+                            show()
+                        }
+                    }
+
+                    is Result.Error -> {
+                        showLoading(false)
+                        AlertDialog.Builder(this).apply {
+                            setTitle("Error")
+                            setMessage(result.error)
+                            setPositiveButton("OK", null)
+                            create()
+                            show()
+                        }
+                    }
                 }
-                create()
-                show()
             }
         }
     }
@@ -73,5 +104,9 @@ class SignupActivity : AppCompatActivity() {
             playSequentially(title, name, nameEdt, email, emailEdt, password, passwordEdt, signup)
             start()
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }
