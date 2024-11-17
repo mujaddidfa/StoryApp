@@ -10,13 +10,13 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.dicoding.storyapp.data.api.ApiConfig
 import com.dicoding.storyapp.utils.Result
 import com.dicoding.storyapp.databinding.ActivitySignupBinding
+import com.dicoding.storyapp.view.ViewModelFactory
 
 class SignupActivity : AppCompatActivity() {
-    private val signupViewModel: SignupViewModel by viewModels {
-        SignupViewModelFactory(ApiConfig.getApiService())
+    private val viewModel by viewModels<SignupViewModel> {
+        ViewModelFactory.getInstance(this)
     }
 
     private lateinit var binding: ActivitySignupBinding
@@ -50,7 +50,7 @@ class SignupActivity : AppCompatActivity() {
             val email = binding.edRegisterEmail.text.toString()
             val password = binding.edRegisterPassword.text.toString()
 
-            signupViewModel.register(name, email, password).observe(this) { result ->
+            viewModel.register(name, email, password).observe(this) { result ->
                 when (result) {
                     is Result.Loading -> {
                         showLoading(true)
