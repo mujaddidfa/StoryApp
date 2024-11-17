@@ -16,7 +16,7 @@ import com.dicoding.storyapp.databinding.ActivitySignupBinding
 
 class SignupActivity : AppCompatActivity() {
     private val signupViewModel: SignupViewModel by viewModels {
-        SignupViewModelFactory(this, ApiConfig.getApiService())
+        SignupViewModelFactory(ApiConfig.getApiService())
     }
 
     private lateinit var binding: ActivitySignupBinding
@@ -60,7 +60,7 @@ class SignupActivity : AppCompatActivity() {
                         showLoading(false)
                         AlertDialog.Builder(this).apply {
                             setTitle("Yeah!")
-                            setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
+                            setMessage(result.data)
                             setPositiveButton("Lanjut") { _, _ ->
                                 finish()
                             }
@@ -74,6 +74,17 @@ class SignupActivity : AppCompatActivity() {
                         AlertDialog.Builder(this).apply {
                             setTitle("Error")
                             setMessage(result.error)
+                            setPositiveButton("OK", null)
+                            create()
+                            show()
+                        }
+                    }
+
+                    else -> {
+                        showLoading(false)
+                        AlertDialog.Builder(this).apply {
+                            setTitle("Error")
+                            setMessage("Unknown error occurred")
                             setPositiveButton("OK", null)
                             create()
                             show()
