@@ -1,4 +1,4 @@
-package com.dicoding.storyapp.data
+package com.dicoding.storyapp.utils
 
 sealed class Result<out R> private constructor() {
     data class Success<out T>(val data: T) : Result<T>()

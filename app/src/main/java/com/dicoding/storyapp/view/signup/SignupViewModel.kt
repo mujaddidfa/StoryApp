@@ -2,7 +2,7 @@ package com.dicoding.storyapp.view.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.dicoding.storyapp.data.Result
+import com.dicoding.storyapp.utils.Result
 import com.dicoding.storyapp.data.api.ApiService
 import com.dicoding.storyapp.data.api.ErrorResponse
 import com.google.gson.Gson

@@ -11,7 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.storyapp.data.api.ApiConfig
-import com.dicoding.storyapp.data.Result
+import com.dicoding.storyapp.utils.Result
 import com.dicoding.storyapp.databinding.ActivitySignupBinding
 
 class SignupActivity : AppCompatActivity() {

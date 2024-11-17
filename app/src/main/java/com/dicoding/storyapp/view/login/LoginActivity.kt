@@ -12,9 +12,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.storyapp.view.main.MainActivity
-import com.dicoding.storyapp.data.pref.UserModel
 import com.dicoding.storyapp.databinding.ActivityLoginBinding
 import com.dicoding.storyapp.view.ViewModelFactory
+import com.dicoding.storyapp.utils.Result
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel> {
@@ -49,18 +49,44 @@ class LoginActivity : AppCompatActivity() {
     private fun setupAction() {
         binding.loginButton.setOnClickListener {
             val email = binding.edLoginEmail.text.toString()
-            viewModel.saveSession(UserModel(email, "sample_token"))
-            AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
-                setPositiveButton("Lanjut") { _, _ ->
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()
+            val password = binding.edLoginPassword.text.toString()
+
+            viewModel.login(email, password).observe(this) { result ->
+                when (result) {
+                    is Result.Loading -> {
+                        showLoading(true)
+                    }
+
+                    is Result.Success -> {
+                        showLoading(false)
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                        finish()
+                    }
+
+                    is Result.Error -> {
+                        showLoading(false)
+                        AlertDialog.Builder(this).apply {
+                            setTitle("Error")
+                            setMessage(result.error)
+                            setPositiveButton("OK", null)
+                            create()
+                            show()
+                        }
+                    }
+
+                    else -> {
+                        showLoading(false)
+                        AlertDialog.Builder(this).apply {
+                            setTitle("Error")
+                            setMessage("Unknown error occurred")
+                            setPositiveButton("OK", null)
+                            create()
+                            show()
+                        }
+                    }
                 }
-                create()
-                show()
             }
         }
     }
@@ -80,11 +106,15 @@ class LoginActivity : AppCompatActivity() {
         val emailEdt = ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
         val password = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
         val passwordEdt = ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
-        val login = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(1000)
+        val login = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(100)
 
         AnimatorSet().apply {
             playSequentially(title, message, email, emailEdt, password, passwordEdt, login)
             start()
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }
