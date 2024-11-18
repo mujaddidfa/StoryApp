@@ -20,6 +20,7 @@ import com.dicoding.storyapp.databinding.ActivityMainBinding
 import com.dicoding.storyapp.view.ViewModelFactory
 import com.dicoding.storyapp.view.welcome.WelcomeActivity
 import com.dicoding.storyapp.utils.Result
+import com.dicoding.storyapp.view.detail.DetailActivity
 
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel> {
@@ -109,11 +110,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showDetailStory(story: ListStoryItem) {
-//        val id = story.id
-//        val intent = Intent(this, DetailActivity::class.java)
-//        intent.putExtra(DetailActivity.EXTRA_ID, id)
-//        startActivity(intent)
-        Toast.makeText(this, "Show Detail Story", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra(DetailActivity.EXTRA_STORY, story)
+        startActivity(intent)
     }
 
     private fun showLoading(isLoading: Boolean) {
