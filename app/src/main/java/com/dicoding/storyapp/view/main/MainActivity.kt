@@ -5,6 +5,8 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -12,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.storyapp.R
 import com.dicoding.storyapp.data.api.response.ListStoryItem
 import com.dicoding.storyapp.databinding.ActivityMainBinding
 import com.dicoding.storyapp.view.ViewModelFactory
@@ -41,7 +44,6 @@ class MainActivity : AppCompatActivity() {
         binding.rvStory.layoutManager = layoutManager
 
         setupView()
-        setupAction()
         playAnimation()
         observeStories()
     }
@@ -56,12 +58,21 @@ class MainActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
-        supportActionBar?.hide()
+        supportActionBar?.show()
     }
 
-    private fun setupAction() {
-        binding.logoutButton.setOnClickListener {
-            viewModel.logout()
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_logout -> {
+                viewModel.logout()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
