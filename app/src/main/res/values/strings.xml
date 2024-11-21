@@ -16,4 +16,9 @@
     <string name="story_image">Foto Story</string>
     <string name="story_description">Deskripsi Story</string>
     <string name="user_name">Nama User</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="upload">Upload</string>
+    <string name="description">description</string>
+    <string name="no_image_selected">Tidak ada gambar yang dipilih</string>
 </resources>

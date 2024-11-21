@@ -20,6 +20,7 @@ import com.dicoding.storyapp.databinding.ActivityMainBinding
 import com.dicoding.storyapp.view.ViewModelFactory
 import com.dicoding.storyapp.view.welcome.WelcomeActivity
 import com.dicoding.storyapp.utils.Result
+import com.dicoding.storyapp.view.addstory.AddStoryActivity
 import com.dicoding.storyapp.view.detail.DetailActivity
 
 class MainActivity : AppCompatActivity() {
@@ -43,6 +44,10 @@ class MainActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.rvStory.layoutManager = layoutManager
+
+        binding.fabAddStory.setOnClickListener {
+            startActivity(Intent(this, AddStoryActivity::class.java))
+        }
 
         setupView()
         playAnimation()
