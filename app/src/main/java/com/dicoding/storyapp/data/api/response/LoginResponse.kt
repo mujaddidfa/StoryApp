@@ -1,4 +1,4 @@
-package com.dicoding.storyapp.data.api
+package com.dicoding.storyapp.data.api.response
 
 import com.google.gson.annotations.SerializedName
 

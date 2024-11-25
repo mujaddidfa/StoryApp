@@ -3,16 +3,15 @@ package com.dicoding.storyapp.view
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.dicoding.storyapp.data.api.ApiService
-import com.dicoding.storyapp.data.repository.UserRepository
+import com.dicoding.storyapp.data.repository.StoryRepository
 import com.dicoding.storyapp.di.Injection
+import com.dicoding.storyapp.view.addstory.AddStoryViewModel
 import com.dicoding.storyapp.view.login.LoginViewModel
 import com.dicoding.storyapp.view.main.MainViewModel
 import com.dicoding.storyapp.view.signup.SignupViewModel
 
 class ViewModelFactory(
-    private val apiService: ApiService,
-    private val repository: UserRepository
+    private val repository: StoryRepository
 ) : ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -24,7 +23,10 @@ class ViewModelFactory(
                 LoginViewModel(repository) as T
             }
             modelClass.isAssignableFrom(SignupViewModel::class.java) -> {
-                SignupViewModel(apiService) as T
+                SignupViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(AddStoryViewModel::class.java) -> {
+                AddStoryViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
@@ -35,14 +37,9 @@ class ViewModelFactory(
         private var INSTANCE: ViewModelFactory? = null
         @JvmStatic
         fun getInstance(context: Context): ViewModelFactory {
-            if (INSTANCE == null) {
-                synchronized(ViewModelFactory::class.java) {
-                    val apiService = Injection.provideApiService()
-                    val repository = Injection.provideRepository(context)
-                    INSTANCE = ViewModelFactory(apiService, repository)
-                }
-            }
-            return INSTANCE as ViewModelFactory
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: ViewModelFactory(Injection.provideRepository(context))
+            }.also { INSTANCE = it }
         }
     }
 }
