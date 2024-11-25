@@ -21,4 +21,6 @@
     <string name="upload">Upload</string>
     <string name="description">description</string>
     <string name="no_image_selected">Tidak ada gambar yang dipilih</string>
+    <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
+    <string name="upload_success">Story berhasil diupload</string>
 </resources>

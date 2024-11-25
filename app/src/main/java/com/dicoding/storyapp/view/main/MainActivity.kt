@@ -123,4 +123,9 @@ class MainActivity : AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
+
+    override fun onResume() {
+        super.onResume()
+        observeStories()
+    }
 }
