@@ -1,7 +1,5 @@
 package com.dicoding.storyapp.view.main
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +11,8 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.storyapp.R
 import com.dicoding.storyapp.data.api.response.ListStoryItem
@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupView()
-        playAnimation()
         observeStories()
     }
 
@@ -84,10 +83,6 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun playAnimation() {
-
     }
 
     private fun observeStories() {
@@ -120,7 +115,14 @@ class MainActivity : AppCompatActivity() {
     private fun showDetailStory(story: ListStoryItem) {
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra(DetailActivity.EXTRA_STORY, story)
-        startActivity(intent)
+
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            this,
+            Pair(binding.rvStory.findViewById(R.id.iv_item_photo), "photo"),
+            Pair(binding.rvStory.findViewById(R.id.tv_item_name), "name"),
+            Pair(binding.rvStory.findViewById(R.id.tv_item_description), "description")
+        )
+        startActivity(intent, options.toBundle())
     }
 
     private fun showLoading(isLoading: Boolean) {
