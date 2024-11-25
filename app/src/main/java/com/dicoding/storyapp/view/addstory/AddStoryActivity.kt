@@ -15,6 +15,7 @@ import com.dicoding.storyapp.R
 import com.dicoding.storyapp.data.api.response.FileUploadResponse
 import com.dicoding.storyapp.databinding.ActivityAddStoryBinding
 import com.dicoding.storyapp.utils.getImageUri
+import com.dicoding.storyapp.utils.reduceFileImage
 import com.dicoding.storyapp.utils.uriToFile
 import com.dicoding.storyapp.view.ViewModelFactory
 import com.dicoding.storyapp.view.main.MainActivity
@@ -23,7 +24,6 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
@@ -91,8 +91,7 @@ class AddStoryActivity : AppCompatActivity() {
 
     private fun uploadStory() {
         currentImageUri?.let { uri ->
-            val imageFile = uriToFile(uri, this)
-            Log.d("Image File", "showImage: ${imageFile.path}")
+            val imageFile = uriToFile(uri, this).reduceFileImage()
             val description = binding.descriptionEditText.text.toString()
 
             showLoading(true)
@@ -104,6 +103,7 @@ class AddStoryActivity : AppCompatActivity() {
                 imageFile.name,
                 requestImageFile
             )
+
             lifecycleScope.launch {
                 try {
                     viewModel.uploadStory(requestBody, multipartBody)

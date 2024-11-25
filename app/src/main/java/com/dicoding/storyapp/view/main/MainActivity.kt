@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: StoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +42,9 @@ class MainActivity : AppCompatActivity() {
                 finish()
             }
         }
+
+        adapter = StoryAdapter()
+        binding.rvStory.adapter = adapter
 
         val layoutManager = LinearLayoutManager(this)
         binding.rvStory.layoutManager = layoutManager
@@ -87,7 +91,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeStories() {
-        viewModel.getStories().observe(this) { result ->
+        viewModel.getStories().observeForever { result ->
             when (result) {
                 is Result.Loading -> showLoading(true)
                 is Result.Success -> {
@@ -103,7 +107,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setItemData(story: List<ListStoryItem>) {
-        val adapter = StoryAdapter()
         adapter.submitList(story)
         binding.rvStory.adapter = adapter
 
