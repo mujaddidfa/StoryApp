@@ -92,7 +92,7 @@ class AddStoryActivity : AppCompatActivity() {
     private fun uploadStory() {
         currentImageUri?.let { uri ->
             val imageFile = uriToFile(uri, this).reduceFileImage()
-            val description = binding.descriptionEditText.text.toString()
+            val description = binding.edAddDescription.text.toString()
 
             showLoading(true)
 

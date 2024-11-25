@@ -71,7 +71,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <EditText
-                android:id="@+id/descriptionEditText"
+                android:id="@+id/ed_add_description"
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
                 android:hint="@string/description"
