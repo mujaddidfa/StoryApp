@@ -2,11 +2,10 @@
     <string name="app_name">Story App</string>
     <string name="signup">Daftar</string>
     <string name="login">Masuk</string>
-    <string name="message_welcome_page">Mau belajar Android, iOS, Machine Learning, Cloud, Front-End, Back-End, dan bidang IT lainnya? Di Dicoding aja!</string>
     <string name="title_welcome_page">Selamat datang di Dicoding!</string>
     <string name="title_signup_page">Lengkapi data dirimu di bawah ini ya</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="password" translatable="false">Password</string>
     <string name="message_login_page">Masukkan dulu datamu ya</string>
     <string name="title_login_page">Sudah siap untuk upgrade skill?</string>
     <string name="name">Nama</string>
@@ -16,12 +15,13 @@
     <string name="story_image">Foto Story</string>
     <string name="story_description">Deskripsi Story</string>
     <string name="user_name">Nama User</string>
-    <string name="camera">Camera</string>
-    <string name="gallery">Gallery</string>
-    <string name="upload">Upload</string>
-    <string name="description">description</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+    <string name="upload">Unggah</string>
     <string name="no_image_selected">Tidak ada gambar yang dipilih</string>
     <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
     <string name="upload_success">Story berhasil diupload</string>
-    <string name="upload_failed">Upload gagal</string>
+    <string name="message_welcome_page">Mau belajar Android, iOS, Machine Learning, Cloud, Front-End, Back-End, dan bidang IT lainnya? Di Dicoding aja!</string>
+    <string name="description">Deskripsi</string>
+    <string name="language_settings">Pengaturan Bahasa</string>
 </resources>

@@ -3,6 +3,7 @@ package com.dicoding.storyapp.view.main
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -79,6 +80,10 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_logout -> {
                 viewModel.logout()
+                true
+            }
+            R.id.action_setting -> {
+                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
                 true
             }
             else -> super.onOptionsItemSelected(item)
