@@ -24,4 +24,6 @@
     <string name="message_welcome_page">Mau belajar Android, iOS, Machine Learning, Cloud, Front-End, Back-End, dan bidang IT lainnya? Di Dicoding aja!</string>
     <string name="description">Deskripsi</string>
     <string name="language_settings">Pengaturan Bahasa</string>
+    <string name="appwidget_text" translatable="false">STORY APP</string>
+    <string name="empty_text">TIDAK ADA DATA</string>
 </resources>

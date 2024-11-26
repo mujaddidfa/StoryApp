@@ -23,4 +23,5 @@
     <string name="empty_image_warning">Please insert the image file first.</string>
     <string name="upload_success">Story successfully uploaded</string>
     <string name="language_settings">Language Settings</string>
+    <string name="empty_text">NO DATA</string>
 </resources>
