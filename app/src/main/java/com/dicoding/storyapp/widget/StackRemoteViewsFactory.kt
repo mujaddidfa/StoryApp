@@ -19,9 +19,7 @@ internal class StackRemoteViewsFactory(private val mContext: Context) : RemoteVi
     private val mWidgetItems = ArrayList<Bitmap>()
     private val stories = ArrayList<ListStoryItem>()
 
-    override fun onCreate() {
-
-    }
+    override fun onCreate() {}
 
     override fun onDataSetChanged() {
         mWidgetItems.clear()
@@ -48,9 +46,7 @@ internal class StackRemoteViewsFactory(private val mContext: Context) : RemoteVi
         }
     }
 
-    override fun onDestroy() {
-
-    }
+    override fun onDestroy() {}
 
     override fun getCount(): Int = mWidgetItems.size
 

@@ -96,10 +96,16 @@ class MainActivity : AppCompatActivity() {
                 is Result.Loading -> showLoading(true)
                 is Result.Success -> {
                     showLoading(false)
-                    setItemData(result.data)
+                    if (result.data.isEmpty()) {
+                        binding.tvNoData.visibility = View.VISIBLE
+                    } else {
+                        binding.tvNoData.visibility = View.GONE
+                        setItemData(result.data)
+                    }
                 }
                 is Result.Error -> {
                     showLoading(false)
+                    binding.tvNoData.visibility = View.VISIBLE
                     Toast.makeText(this, "Error: ${result.error}", Toast.LENGTH_SHORT).show()
                 }
             }

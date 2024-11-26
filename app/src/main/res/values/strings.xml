@@ -20,10 +20,11 @@
     <string name="upload">Unggah</string>
     <string name="no_image_selected">Tidak ada gambar yang dipilih</string>
     <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
-    <string name="upload_success">Story berhasil diupload</string>
+    <string name="upload_success">Story berhasil diunggah</string>
     <string name="message_welcome_page">Mau belajar Android, iOS, Machine Learning, Cloud, Front-End, Back-End, dan bidang IT lainnya? Di Dicoding aja!</string>
     <string name="description">Deskripsi</string>
     <string name="language_settings">Pengaturan Bahasa</string>
     <string name="appwidget_text" translatable="false">STORY APP</string>
     <string name="empty_text">TIDAK ADA DATA</string>
+    <string name="upload_story">Unggah Cerita</string>
 </resources>
