@@ -25,13 +25,8 @@ internal class StackRemoteViewsFactory(private val mContext: Context) : RemoteVi
         mWidgetItems.clear()
         stories.clear()
 
-        val userPreference = UserPreference.getInstance(mContext.dataStore)
-        val token: String = runBlocking {
-            userPreference.getToken().first()
-        }
-
         runBlocking {
-            val apiService = ApiConfig.getApiService(token)
+            val apiService = ApiConfig.getApiService()
             val response = apiService.getStories()
             stories.addAll(response.listStory)
         }

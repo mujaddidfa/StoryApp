@@ -3,9 +3,11 @@ package com.dicoding.storyapp.view.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.dicoding.storyapp.data.api.ApiConfig
 import com.dicoding.storyapp.data.api.response.ErrorResponse
 import com.dicoding.storyapp.data.repository.AuthRepository
 import com.dicoding.storyapp.data.pref.UserModel
+import com.dicoding.storyapp.di.Injection
 import com.dicoding.storyapp.utils.Result
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -19,6 +21,8 @@ class LoginViewModel(private val repository: AuthRepository) : ViewModel() {
             response.loginResult?.token?.let { token ->
                 repository.saveToken(token)
                 saveUser(UserModel(email, token))
+                ApiConfig.setToken(token)
+                Injection.updateStoryRepositoryToken(token)
             }
             emit(Result.Success(response.message!!))
         } catch (e: HttpException) {

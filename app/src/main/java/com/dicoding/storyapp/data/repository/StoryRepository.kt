@@ -9,6 +9,12 @@ import okhttp3.RequestBody
 class StoryRepository private constructor(
     private val apiService: ApiService
 ) {
+    private var token: String? = null
+
+    fun updateToken(newToken: String) {
+        token = newToken
+    }
+
     suspend fun getStories(): List<ListStoryItem> {
         val response = apiService.getStories()
         return response.listStory

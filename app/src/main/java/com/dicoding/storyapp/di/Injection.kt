@@ -10,16 +10,29 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 object Injection {
+    private var storyRepository: StoryRepository? = null
+
     fun provideAuthRepository(context: Context): AuthRepository {
         val pref = UserPreference.getInstance(context.dataStore)
-        val apiService = ApiConfig.getApiService("")
+        val apiService = ApiConfig.getApiService()
         return AuthRepository.getInstance(apiService, pref)
     }
 
     fun provideStoryRepository(context: Context): StoryRepository {
-        val pref = UserPreference.getInstance(context.dataStore)
-        val user = runBlocking { pref.getUser().first() }
-        val apiService = ApiConfig.getApiService(user.token)
-        return StoryRepository.getInstance(apiService)
+        if (storyRepository == null) {
+            val pref = UserPreference.getInstance(context.dataStore)
+            val user = runBlocking { pref.getUser().first() }
+            val apiService = ApiConfig.getApiService()
+            storyRepository = StoryRepository.getInstance(apiService)
+            user.token.let { token ->
+                ApiConfig.setToken(token)
+                storyRepository?.updateToken(token)
+            }
+        }
+        return storyRepository!!
+    }
+
+    fun updateStoryRepositoryToken(token: String) {
+        storyRepository?.updateToken(token)
     }
 }

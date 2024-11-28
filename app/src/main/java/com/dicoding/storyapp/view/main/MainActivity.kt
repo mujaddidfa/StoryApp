@@ -16,8 +16,10 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.storyapp.R
+import com.dicoding.storyapp.data.api.ApiConfig
 import com.dicoding.storyapp.data.api.response.ListStoryItem
 import com.dicoding.storyapp.databinding.ActivityMainBinding
+import com.dicoding.storyapp.di.Injection
 import com.dicoding.storyapp.view.ViewModelFactory
 import com.dicoding.storyapp.view.welcome.WelcomeActivity
 import com.dicoding.storyapp.utils.Result
@@ -41,6 +43,9 @@ class MainActivity : AppCompatActivity() {
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
+            } else {
+                ApiConfig.setToken(user.token)
+                Injection.updateStoryRepositoryToken(user.token)
             }
         }
 
