@@ -4,14 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.dicoding.storyapp.data.api.response.ErrorResponse
-import com.dicoding.storyapp.data.repository.StoryRepository
+import com.dicoding.storyapp.data.repository.AuthRepository
 import com.dicoding.storyapp.data.pref.UserModel
 import com.dicoding.storyapp.utils.Result
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class LoginViewModel(private val repository: StoryRepository) : ViewModel() {
+class LoginViewModel(private val repository: AuthRepository) : ViewModel() {
     fun login(email: String, password: String) = liveData {
         emit(Result.Loading)
         try {

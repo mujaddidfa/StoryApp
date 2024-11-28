@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.dicoding.storyapp.utils.Result
 import com.dicoding.storyapp.data.api.response.ErrorResponse
-import com.dicoding.storyapp.data.repository.StoryRepository
+import com.dicoding.storyapp.data.repository.AuthRepository
 import com.google.gson.Gson
 import retrofit2.HttpException
 
-class SignupViewModel(private val repository: StoryRepository) : ViewModel() {
+class SignupViewModel(private val repository: AuthRepository) : ViewModel() {
     fun register(name: String, email: String, password: String) = liveData {
         emit(Result.Loading)
         try {

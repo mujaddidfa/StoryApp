@@ -3,32 +3,12 @@ package com.dicoding.storyapp.data.repository
 import com.dicoding.storyapp.data.api.ApiService
 import com.dicoding.storyapp.data.api.response.FileUploadResponse
 import com.dicoding.storyapp.data.api.response.ListStoryItem
-import com.dicoding.storyapp.data.pref.UserModel
-import com.dicoding.storyapp.data.pref.UserPreference
-import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 class StoryRepository private constructor(
-    private val apiService: ApiService,
-    private val userPreference: UserPreference
+    private val apiService: ApiService
 ) {
-    suspend fun login(email: String, password: String) = apiService.login(email, password)
-
-    suspend fun register(name: String, email: String, password: String) = apiService.register(name, email, password)
-
-    suspend fun saveUser(user: UserModel) {
-        userPreference.saveUser(user)
-    }
-
-    suspend fun saveToken(token: String) {
-        userPreference.saveToken(token)
-    }
-
-    fun getUser(): Flow<UserModel> {
-        return userPreference.getUser()
-    }
-
     suspend fun getStories(): List<ListStoryItem> {
         val response = apiService.getStories()
         return response.listStory
@@ -38,19 +18,14 @@ class StoryRepository private constructor(
         return apiService.uploadStory(description, photo)
     }
 
-    suspend fun logout() {
-        userPreference.logout()
-    }
-
     companion object {
         @Volatile
         private var instance: StoryRepository? = null
         fun getInstance(
-            apiService: ApiService,
-            userPreference: UserPreference
+            apiService: ApiService
         ): StoryRepository =
             instance ?: synchronized(this) {
-                instance ?: StoryRepository(apiService, userPreference)
+                instance ?: StoryRepository(apiService)
             }.also { instance = it }
     }
 }

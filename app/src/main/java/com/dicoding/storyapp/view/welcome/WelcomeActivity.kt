@@ -9,9 +9,15 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.dicoding.storyapp.data.pref.UserPreference
+import com.dicoding.storyapp.data.pref.dataStore
 import com.dicoding.storyapp.databinding.ActivityWelcomeBinding
 import com.dicoding.storyapp.view.login.LoginActivity
+import com.dicoding.storyapp.view.main.MainActivity
 import com.dicoding.storyapp.view.signup.SignupActivity
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
@@ -21,9 +27,22 @@ class WelcomeActivity : AppCompatActivity() {
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        checkLoginStatus()
+
         setupView()
         setupAction()
         playAnimation()
+    }
+
+    private fun checkLoginStatus() {
+        val userPreference = UserPreference.getInstance(dataStore)
+        lifecycleScope.launch {
+            val user = userPreference.getUser().first()
+            if (user.isLogin) {
+                startActivity(Intent(this@WelcomeActivity, MainActivity::class.java))
+                finish()
+            }
+        }
     }
 
     private fun setupView() {
