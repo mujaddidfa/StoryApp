@@ -10,9 +10,6 @@ import com.bumptech.glide.Glide
 import com.dicoding.storyapp.R
 import com.dicoding.storyapp.data.api.ApiConfig
 import com.dicoding.storyapp.data.api.response.ListStoryItem
-import com.dicoding.storyapp.data.pref.UserPreference
-import com.dicoding.storyapp.data.pref.dataStore
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 internal class StackRemoteViewsFactory(private val mContext: Context) : RemoteViewsService.RemoteViewsFactory {

@@ -3,7 +3,6 @@ package com.dicoding.storyapp.view.addstory
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
@@ -89,37 +88,44 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun uploadStory() {
-        currentImageUri?.let { uri ->
-            val imageFile = uriToFile(uri, this).reduceFileImage()
-            val description = binding.edAddDescription.text.toString()
+        val description = binding.edAddDescription.text.toString()
+        if (currentImageUri == null) {
+            showToast(getString(R.string.empty_image_warning))
+            return
+        }
+        if (description.isBlank()) {
+            showToast(getString(R.string.empty_description_warning))
+            return
+        }
 
-            showLoading(true)
+        val imageFile = uriToFile(currentImageUri!!, this).reduceFileImage()
 
-            val requestBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
-            val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
-            val multipartBody = MultipartBody.Part.createFormData(
-                "photo",
-                imageFile.name,
-                requestImageFile
-            )
+        showLoading(true)
 
-            lifecycleScope.launch {
-                try {
-                    viewModel.uploadStory(requestBody, multipartBody)
-                    showToast(getString(R.string.upload_success))
-                    showLoading(false)
-                    val intent = Intent(this@AddStoryActivity, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-                    finish()
-                } catch (e: HttpException) {
-                    val errorBody = e.response()?.errorBody()?.string()
-                    val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
-                    errorResponse.message?.let { showToast(it) }
-                    showLoading(false)
-                }
+        val requestBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
+        val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+        val multipartBody = MultipartBody.Part.createFormData(
+            "photo",
+            imageFile.name,
+            requestImageFile
+        )
+
+        lifecycleScope.launch {
+            try {
+                viewModel.uploadStory(requestBody, multipartBody)
+                showToast(getString(R.string.upload_success))
+                showLoading(false)
+                val intent = Intent(this@AddStoryActivity, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                finish()
+            } catch (e: HttpException) {
+                val errorBody = e.response()?.errorBody()?.string()
+                val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
+                errorResponse.message?.let { showToast(it) }
+                showLoading(false)
             }
-        } ?: showToast(getString(R.string.empty_image_warning))
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {

@@ -25,4 +25,5 @@
     <string name="language_settings">Language Settings</string>
     <string name="empty_text">NO DATA</string>
     <string name="upload_story">Upload Story</string>
+    <string name="empty_description_warning">Please enter an image description first</string>
 </resources>
