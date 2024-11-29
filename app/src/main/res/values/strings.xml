@@ -28,4 +28,5 @@
     <string name="empty_text">TIDAK ADA DATA</string>
     <string name="upload_story">Unggah Cerita</string>
     <string name="empty_description_warning">Harap masukkan deskripsi gambar terlebih dahulu</string>
+    <string name="upload_failed">Story gagal diunggah, periksa koneksi internet Anda</string>
 </resources>

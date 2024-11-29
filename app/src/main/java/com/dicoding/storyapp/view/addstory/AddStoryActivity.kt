@@ -114,7 +114,6 @@ class AddStoryActivity : AppCompatActivity() {
             try {
                 viewModel.uploadStory(requestBody, multipartBody)
                 showToast(getString(R.string.upload_success))
-                showLoading(false)
                 val intent = Intent(this@AddStoryActivity, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
@@ -123,6 +122,9 @@ class AddStoryActivity : AppCompatActivity() {
                 val errorBody = e.response()?.errorBody()?.string()
                 val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
                 errorResponse.message?.let { showToast(it) }
+            } catch (e: Exception) {
+                showToast(getString(R.string.upload_failed))
+            } finally {
                 showLoading(false)
             }
         }
