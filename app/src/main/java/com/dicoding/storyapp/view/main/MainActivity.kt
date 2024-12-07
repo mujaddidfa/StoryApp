@@ -6,10 +6,8 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
@@ -22,7 +20,6 @@ import com.dicoding.storyapp.databinding.ActivityMainBinding
 import com.dicoding.storyapp.di.Injection
 import com.dicoding.storyapp.view.ViewModelFactory
 import com.dicoding.storyapp.view.welcome.WelcomeActivity
-import com.dicoding.storyapp.utils.Result
 import com.dicoding.storyapp.view.addstory.AddStoryActivity
 import com.dicoding.storyapp.view.detail.DetailActivity
 import com.dicoding.storyapp.view.maps.MapsActivity
@@ -50,8 +47,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        adapter = StoryAdapter()
-        binding.rvStory.adapter = adapter
+        getData()
 
         val layoutManager = LinearLayoutManager(this)
         binding.rvStory.layoutManager = layoutManager
@@ -61,7 +57,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupView()
-        observeStories()
     }
 
     private fun setupView() {
@@ -100,37 +95,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeStories() {
-        viewModel.getStories().observeForever { result ->
-            when (result) {
-                is Result.Loading -> showLoading(true)
-                is Result.Success -> {
-                    showLoading(false)
-                    if (result.data.isEmpty()) {
-                        binding.tvNoData.visibility = View.VISIBLE
-                    } else {
-                        binding.tvNoData.visibility = View.GONE
-                        setItemData(result.data)
-                    }
-                }
-                is Result.Error -> {
-                    showLoading(false)
-                    binding.tvNoData.visibility = View.VISIBLE
-                    Toast.makeText(this, "Error: ${result.error}", Toast.LENGTH_SHORT).show()
-                }
-            }
+    private fun getData() {
+        adapter = StoryAdapter()
+        viewModel.story.observe(this) {
+            adapter.submitData(lifecycle, it)
         }
-    }
-
-    private fun setItemData(story: List<ListStoryItem>) {
-        adapter.submitList(story)
-        binding.rvStory.adapter = adapter
-
         adapter.setOnItemClickCallback(object : StoryAdapter.OnItemClickCallback {
             override fun onItemClicked(story: ListStoryItem) {
                 showDetailStory(story)
             }
         })
+        binding.rvStory.adapter = adapter
     }
 
     private fun showDetailStory(story: ListStoryItem) {
@@ -144,14 +119,5 @@ class MainActivity : AppCompatActivity() {
             Pair(binding.rvStory.findViewById(R.id.tv_item_description), "description")
         )
         startActivity(intent, options.toBundle())
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-    }
-
-    override fun onResume() {
-        super.onResume()
-        observeStories()
     }
 }

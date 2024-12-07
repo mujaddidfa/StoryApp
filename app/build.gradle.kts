@@ -70,4 +70,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.glide)
+
+    implementation(libs.androidx.paging.runtime.ktx)
 }

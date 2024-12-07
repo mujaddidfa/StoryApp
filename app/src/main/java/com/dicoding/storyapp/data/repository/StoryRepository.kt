@@ -1,5 +1,11 @@
 package com.dicoding.storyapp.data.repository
 
+import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
+import com.dicoding.storyapp.data.StoryPagingSource
 import com.dicoding.storyapp.data.api.ApiService
 import com.dicoding.storyapp.data.api.response.FileUploadResponse
 import com.dicoding.storyapp.data.api.response.ListStoryItem
@@ -15,9 +21,15 @@ class StoryRepository private constructor(
         token = newToken
     }
 
-    suspend fun getStories(): List<ListStoryItem> {
-        val response = apiService.getStories()
-        return response.listStory
+    fun getStories(): LiveData<PagingData<ListStoryItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20
+            ),
+            pagingSourceFactory = {
+                StoryPagingSource(apiService)
+            }
+        ).liveData
     }
 
     suspend fun getStoriesWithLocation(location: Int = 1): List<ListStoryItem> {
