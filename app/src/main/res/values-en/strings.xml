@@ -27,4 +27,5 @@
     <string name="upload_story">Upload Story</string>
     <string name="empty_description_warning">Please enter an image description first</string>
     <string name="upload_failed">Story failed to upload, please check your internet connection</string>
+    <string name="password_lest_than_8_characters">Password must not be less than 8 characters</string>
 </resources>

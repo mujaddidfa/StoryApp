@@ -3,6 +3,7 @@ package com.dicoding.storyapp.view.customview
 import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
+import com.dicoding.storyapp.R
 
 class PasswordEditText @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -14,7 +15,7 @@ class PasswordEditText @JvmOverloads constructor(
         count: Int
     ) {
         if (s.toString().length < 8) {
-            setError("Password tidak boleh kurang dari 8 karakter", null)
+            setError(context.getString(R.string.password_lest_than_8_characters), null)
         } else {
             error = null
         }
