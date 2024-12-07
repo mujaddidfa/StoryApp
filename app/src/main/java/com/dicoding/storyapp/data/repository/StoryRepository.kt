@@ -20,6 +20,11 @@ class StoryRepository private constructor(
         return response.listStory
     }
 
+    suspend fun getStoriesWithLocation(location: Int = 1): List<ListStoryItem> {
+        val response = apiService.getStoriesWithLocation(location)
+        return response.listStory
+    }
+
     suspend fun uploadStory(description: RequestBody, photo: MultipartBody.Part): FileUploadResponse {
         return apiService.uploadStory(description, photo)
     }
