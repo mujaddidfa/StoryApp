@@ -30,4 +30,6 @@
     <string name="empty_description_warning">Harap masukkan deskripsi gambar terlebih dahulu</string>
     <string name="upload_failed">Story gagal diunggah, periksa koneksi internet Anda</string>
     <string name="password_lest_than_8_characters">Password tidak boleh kurang dari 8 karakter</string>
+    <string name="title_activity_maps" translatable="false">MapsActivity</string>
+    <string name="maps" translatable="false">Maps</string>
 </resources>

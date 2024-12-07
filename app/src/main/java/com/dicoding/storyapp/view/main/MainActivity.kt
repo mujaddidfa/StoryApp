@@ -25,6 +25,7 @@ import com.dicoding.storyapp.view.welcome.WelcomeActivity
 import com.dicoding.storyapp.utils.Result
 import com.dicoding.storyapp.view.addstory.AddStoryActivity
 import com.dicoding.storyapp.view.detail.DetailActivity
+import com.dicoding.storyapp.view.maps.MapsActivity
 
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel> {
@@ -89,6 +90,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_setting -> {
                 startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+                true
+            }
+            R.id.action_maps -> {
+                startActivity(Intent(this, MapsActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
