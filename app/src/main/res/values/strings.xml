@@ -32,4 +32,5 @@
     <string name="password_lest_than_8_characters">Password tidak boleh kurang dari 8 karakter</string>
     <string name="title_activity_maps" translatable="false">MapsActivity</string>
     <string name="maps" translatable="false">Maps</string>
+    <string name="retry">Coba lagi</string>
 </resources>

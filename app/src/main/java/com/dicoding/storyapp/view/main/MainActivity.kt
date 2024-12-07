@@ -105,7 +105,11 @@ class MainActivity : AppCompatActivity() {
                 showDetailStory(story)
             }
         })
-        binding.rvStory.adapter = adapter
+        binding.rvStory.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
     }
 
     private fun showDetailStory(story: ListStoryItem) {
