@@ -1,18 +1,21 @@
 package com.dicoding.storyapp.data.repository
 
 import androidx.lifecycle.LiveData
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
-import com.dicoding.storyapp.data.StoryPagingSource
+import com.dicoding.storyapp.data.StoryRemoteMediator
 import com.dicoding.storyapp.data.api.ApiService
 import com.dicoding.storyapp.data.api.response.FileUploadResponse
 import com.dicoding.storyapp.data.api.response.ListStoryItem
+import com.dicoding.storyapp.data.database.StoryDatabase
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 class StoryRepository private constructor(
+    private val storyDatabase: StoryDatabase,
     private val apiService: ApiService
 ) {
     private var token: String? = null
@@ -22,12 +25,14 @@ class StoryRepository private constructor(
     }
 
     fun getStories(): LiveData<PagingData<ListStoryItem>> {
+        @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = 20
             ),
+            remoteMediator = StoryRemoteMediator(storyDatabase, apiService),
             pagingSourceFactory = {
-                StoryPagingSource(apiService)
+                storyDatabase.storyDao().getAllStories()
             }
         ).liveData
     }
@@ -45,10 +50,11 @@ class StoryRepository private constructor(
         @Volatile
         private var instance: StoryRepository? = null
         fun getInstance(
+            storyDatabase: StoryDatabase,
             apiService: ApiService
         ): StoryRepository =
             instance ?: synchronized(this) {
-                instance ?: StoryRepository(apiService)
+                instance ?: StoryRepository(storyDatabase, apiService)
             }.also { instance = it }
     }
 }
