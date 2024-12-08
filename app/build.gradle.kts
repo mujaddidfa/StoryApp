@@ -12,6 +12,7 @@ android {
     defaultConfig {
         applicationId = "com.dicoding.storyapp"
         minSdk = 24
+        //noinspection OldTargetApi
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -72,4 +73,12 @@ dependencies {
     implementation(libs.glide)
 
     implementation(libs.androidx.paging.runtime.ktx)
+
+    androidTestImplementation(libs.androidx.core.testing)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
 }

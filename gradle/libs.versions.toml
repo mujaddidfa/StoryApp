@@ -1,4 +1,5 @@
 [versions]
+#noinspection AndroidGradlePluginVersion
 agp = "8.6.0"
 datastorePreferences = "1.1.1"
 glide = "4.16.0"
@@ -21,7 +22,11 @@ loggingInterceptor = "4.11.0"
 retrofit = "2.9.0"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
 playServicesMaps = "19.0.0"
-pagingRuntimeKtx = "3.1.0"
+pagingRuntimeKtx = "3.3.4"
+coreTesting = "2.2.0"
+kotlinxCoroutinesTest = "1.7.3"
+mockitoCore = "5.6.0"
+mockitoInline = "5.2.0"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
@@ -46,6 +51,10 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit2-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
