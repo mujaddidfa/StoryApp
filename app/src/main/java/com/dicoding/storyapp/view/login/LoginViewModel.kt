@@ -10,6 +10,7 @@ import com.dicoding.storyapp.data.api.response.ErrorResponse
 import com.dicoding.storyapp.data.repository.AuthRepository
 import com.dicoding.storyapp.data.pref.UserModel
 import com.dicoding.storyapp.di.Injection
+import com.dicoding.storyapp.utils.EspressoIdlingResource
 import com.dicoding.storyapp.utils.Result
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ class LoginViewModel(private val repository: AuthRepository) : ViewModel() {
     val isLoading: LiveData<Boolean> get() = _isLoading
 
     fun login(email: String, password: String) = liveData {
+        EspressoIdlingResource.increment()
         _isLoading.value = true
         try {
             val response = repository.login(email, password)
@@ -38,6 +40,7 @@ class LoginViewModel(private val repository: AuthRepository) : ViewModel() {
             emit(Result.Error(e.message ?: "Unknown error"))
         } finally {
             _isLoading.value = false
+            EspressoIdlingResource.decrement()
         }
     }
 

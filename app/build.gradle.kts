@@ -88,4 +88,9 @@ dependencies {
     implementation(libs.androidx.room.paging)
     implementation(libs.androidx.room.ktx)
     ksp(libs.room.compiler)
+
+    androidTestImplementation(libs.mockwebserver)
+    androidTestImplementation(libs.okhttp3.okhttp.tls)
+    implementation(libs.androidx.espresso.idling.resource)
+    androidTestImplementation(libs.espresso.intents)
 }
