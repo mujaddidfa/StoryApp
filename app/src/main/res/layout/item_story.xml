@@ -58,6 +58,8 @@
             android:layout_marginEnd="16dp"
             android:textSize="12sp"
             android:text="@string/story_description"
+            android:maxLines="3"
+            android:ellipsize="end"
             android:transitionName="description" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
