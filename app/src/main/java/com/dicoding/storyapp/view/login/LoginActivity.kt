@@ -31,6 +31,10 @@ class LoginActivity : AppCompatActivity() {
         setupView()
         setupAction()
         playAnimation()
+
+        viewModel.isLoading.observe(this) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
     }
 
     private fun setupView() {
@@ -53,12 +57,7 @@ class LoginActivity : AppCompatActivity() {
 
             viewModel.login(email, password).observe(this) { result ->
                 when (result) {
-                    is Result.Loading -> {
-                        showLoading(true)
-                    }
-
                     is Result.Success -> {
-                        showLoading(false)
                         val intent = Intent(this, MainActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
@@ -66,7 +65,6 @@ class LoginActivity : AppCompatActivity() {
                     }
 
                     is Result.Error -> {
-                        showLoading(false)
                         AlertDialog.Builder(this).apply {
                             setTitle("Error")
                             setMessage(result.error)
@@ -77,7 +75,6 @@ class LoginActivity : AppCompatActivity() {
                     }
 
                     else -> {
-                        showLoading(false)
                         AlertDialog.Builder(this).apply {
                             setTitle("Error")
                             setMessage("Unknown error occurred")
@@ -112,9 +109,5 @@ class LoginActivity : AppCompatActivity() {
             playSequentially(title, message, email, emailEdt, password, passwordEdt, login)
             start()
         }
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }

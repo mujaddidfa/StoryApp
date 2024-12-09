@@ -1,5 +1,7 @@
 package com.dicoding.storyapp.view.login
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
@@ -14,8 +16,11 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 class LoginViewModel(private val repository: AuthRepository) : ViewModel() {
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     fun login(email: String, password: String) = liveData {
-        emit(Result.Loading)
+        _isLoading.value = true
         try {
             val response = repository.login(email, password)
             response.loginResult?.token?.let { token ->
@@ -31,6 +36,8 @@ class LoginViewModel(private val repository: AuthRepository) : ViewModel() {
             emit(errorBody.message?.let { Result.Error(it) })
         } catch (e: Exception) {
             emit(Result.Error(e.message ?: "Unknown error"))
+        } finally {
+            _isLoading.value = false
         }
     }
 

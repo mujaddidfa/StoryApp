@@ -55,7 +55,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             this,
             ViewModelFactory.getInstance(this)
         )[MapsViewModel::class.java]
+
         observeStories()
+
+        viewModel.isLoading.observe(this) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
+        viewModel.errorMessage.observe(this) { errorMessage ->
+            errorMessage?.let { showToast(it) }
+        }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
@@ -77,6 +86,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         menuInflater.inflate(R.menu.map_options, menu)
         return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.normal_type -> {
@@ -123,9 +133,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun observeStories() {
         viewModel.getStoriesWithLocation().observe(this) { result ->
             when (result) {
-                is Result.Loading -> showLoading(true)
                 is Result.Success -> {
-                    showLoading(false)
                     result.data.forEach { story ->
                         val latLng = LatLng(story.lat ?: 0.0, story.lon ?: 0.0)
                         mMap.addMarker(
@@ -138,19 +146,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                 }
                 is Result.Error -> {
-                    showLoading(false)
-                    Toast.makeText(this, "Error: ${result.error}", Toast.LENGTH_SHORT).show()
+                    viewModel.setErrorMessage("Error: ${result.error}")
                 }
 
                 else -> {
-                    showLoading(false)
-                    Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show()
+                    viewModel.setErrorMessage("Unknown error")
                 }
             }
         }
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

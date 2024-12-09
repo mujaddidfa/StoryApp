@@ -29,6 +29,10 @@ class SignupActivity : AppCompatActivity() {
         setupView()
         setupAction()
         playAnimation()
+
+        viewModel.isLoading.observe(this) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
     }
 
     private fun setupView() {
@@ -52,12 +56,7 @@ class SignupActivity : AppCompatActivity() {
 
             viewModel.register(name, email, password).observe(this) { result ->
                 when (result) {
-                    is Result.Loading -> {
-                        showLoading(true)
-                    }
-
                     is Result.Success -> {
-                        showLoading(false)
                         AlertDialog.Builder(this).apply {
                             setTitle("Yeah!")
                             setMessage(result.data)
@@ -70,7 +69,6 @@ class SignupActivity : AppCompatActivity() {
                     }
 
                     is Result.Error -> {
-                        showLoading(false)
                         AlertDialog.Builder(this).apply {
                             setTitle("Error")
                             setMessage(result.error)
@@ -81,7 +79,6 @@ class SignupActivity : AppCompatActivity() {
                     }
 
                     else -> {
-                        showLoading(false)
                         AlertDialog.Builder(this).apply {
                             setTitle("Error")
                             setMessage("Unknown error occurred")
@@ -115,9 +112,5 @@ class SignupActivity : AppCompatActivity() {
             playSequentially(title, name, nameEdt, email, emailEdt, password, passwordEdt, signup)
             start()
         }
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }
