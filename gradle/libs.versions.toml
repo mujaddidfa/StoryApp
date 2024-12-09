@@ -30,6 +30,7 @@ mockitoInline = "5.2.0"
 roomCompiler = "2.5.2"
 roomPaging = "2.6.1"
 roomRuntime = "2.5.2"
+playServicesLocation = "21.3.0"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
@@ -62,6 +63,7 @@ mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 
 [plugins]
