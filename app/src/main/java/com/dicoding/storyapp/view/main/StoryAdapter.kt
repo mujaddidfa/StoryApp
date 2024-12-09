@@ -12,6 +12,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.dicoding.storyapp.R
 import com.dicoding.storyapp.data.api.response.ListStoryItem
 import com.dicoding.storyapp.databinding.ItemStoryBinding
 
@@ -84,6 +85,7 @@ class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.MyViewHolder>
                         return false
                     }
                 })
+                .error(R.drawable.baseline_broken_image_24)
                 .into(binding.ivItemPhoto)
             binding.tvItemName.text = story.name
             binding.tvItemDescription.text = story.description
