@@ -35,10 +35,8 @@ import retrofit2.HttpException
 
 class AddStoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddStoryBinding
-    private val viewModel: AddStoryViewModel by viewModels { ViewModelFactory.getInstance(this) }
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var currentImageUri: Uri? = null
-    private var currentLocation: Location? = null
+    private val viewModel: AddStoryViewModel by viewModels { ViewModelFactory.getInstance(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +49,7 @@ class AddStoryActivity : AppCompatActivity() {
             if (isChecked) {
                 getCurrentLocation()
             } else {
-                currentLocation = null
+                viewModel.setCurrentLocation(null)
             }
         }
 
@@ -66,6 +64,24 @@ class AddStoryActivity : AppCompatActivity() {
         binding.uploadButton.setOnClickListener {
             uploadStory()
         }
+
+        viewModel.currentImageUri.observe(this) { uri ->
+            if (uri != null) {
+                binding.previewImageView.setImageURI(uri)
+            } else {
+                binding.previewImageView.setImageResource(R.drawable.ic_place_holder)
+            }
+        }
+
+        viewModel.isLoading.observe(this) { isLoading ->
+            showLoading(isLoading)
+        }
+
+        viewModel.errorMessage.observe(this) { message ->
+            message?.let {
+                showToast(it)
+            }
+        }
     }
 
     private fun startGallery() {
@@ -76,31 +92,23 @@ class AddStoryActivity : AppCompatActivity() {
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         if (uri != null) {
-            currentImageUri = uri
-            showImage()
+            viewModel.setCurrentImageUri(uri)
         } else {
             Toast.makeText(this, getString(R.string.no_image_selected), Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun showImage() {
-        currentImageUri?.let {
-            binding.previewImageView.setImageURI(it)
-        }
-    }
-
     private fun startCamera() {
-        currentImageUri = getImageUri(this)
-        launcherIntentCamera.launch(currentImageUri!!)
+        val uri = getImageUri(this)
+        viewModel.setCurrentImageUri(uri)
+        launcherIntentCamera.launch(uri)
     }
 
     private val launcherIntentCamera = registerForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { isSuccess ->
-        if (isSuccess) {
-            showImage()
-        } else {
-            currentImageUri = null
+        if (!isSuccess) {
+            viewModel.setCurrentImageUri(null)
         }
     }
 
@@ -111,24 +119,27 @@ class AddStoryActivity : AppCompatActivity() {
             return
         }
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            currentLocation = location
+            viewModel.setCurrentLocation(location)
         }
     }
 
     private fun uploadStory() {
         val description = binding.edAddDescription.text.toString()
+        val currentImageUri = viewModel.currentImageUri.value
+
         if (currentImageUri == null) {
-            showToast(getString(R.string.empty_image_warning))
+            viewModel.setErrorMessage(getString(R.string.empty_image_warning))
             return
         }
+
         if (description.isBlank()) {
-            showToast(getString(R.string.empty_description_warning))
+            viewModel.setErrorMessage(getString(R.string.empty_description_warning))
             return
         }
 
-        val imageFile = uriToFile(currentImageUri!!, this).reduceFileImage()
+        val imageFile = uriToFile(currentImageUri, this).reduceFileImage()
 
-        showLoading(true)
+        viewModel.setLoading(true)
 
         val requestBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
         val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
@@ -138,8 +149,8 @@ class AddStoryActivity : AppCompatActivity() {
             requestImageFile
         )
 
-        val lat = currentLocation?.latitude?.toFloat()
-        val lon = currentLocation?.longitude?.toFloat()
+        val lat = viewModel.currentLocation.value?.latitude?.toFloat()
+        val lon = viewModel.currentLocation.value?.longitude?.toFloat()
 
         lifecycleScope.launch {
             try {
@@ -148,7 +159,7 @@ class AddStoryActivity : AppCompatActivity() {
                 } else {
                     viewModel.uploadStory(requestBody, multipartBody)
                 }
-                showToast(getString(R.string.upload_success))
+                viewModel.setErrorMessage(getString(R.string.upload_success))
                 val intent = Intent(this@AddStoryActivity, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
@@ -156,11 +167,11 @@ class AddStoryActivity : AppCompatActivity() {
             } catch (e: HttpException) {
                 val errorBody = e.response()?.errorBody()?.string()
                 val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
-                errorResponse.message?.let { showToast(it) }
+                errorResponse.message?.let { viewModel.setErrorMessage(it) }
             } catch (e: Exception) {
-                showToast(getString(R.string.upload_failed))
+                viewModel.setErrorMessage(getString(R.string.upload_failed))
             } finally {
-                showLoading(false)
+                viewModel.setLoading(false)
             }
         }
     }

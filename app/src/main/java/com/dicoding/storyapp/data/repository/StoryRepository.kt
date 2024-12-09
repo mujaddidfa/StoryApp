@@ -46,7 +46,7 @@ class StoryRepository private constructor(
         return apiService.uploadStory(description, photo)
     }
 
-    suspend fun uploadStory(description: RequestBody, photo: MultipartBody.Part, lat: Float, lon: Float): FileUploadResponse {
+    suspend fun uploadStory(description: RequestBody, photo: MultipartBody.Part, lat: Float? = null, lon: Float? = null): FileUploadResponse {
         return apiService.uploadStory(description, photo, lat, lon)
     }
 
