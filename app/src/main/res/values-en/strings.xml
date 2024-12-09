@@ -29,4 +29,5 @@
     <string name="upload_failed">Story failed to upload, please check your internet connection</string>
     <string name="password_lest_than_8_characters">Password must not be less than 8 characters</string>
     <string name="retry">Retry</string>
+    <string name="use_current_location">User current location</string>
 </resources>

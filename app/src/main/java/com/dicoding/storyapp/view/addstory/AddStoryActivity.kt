@@ -1,6 +1,9 @@
 package com.dicoding.storyapp.view.addstory
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -9,6 +12,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import com.dicoding.storyapp.R
 import com.dicoding.storyapp.data.api.response.FileUploadResponse
@@ -18,6 +22,8 @@ import com.dicoding.storyapp.utils.reduceFileImage
 import com.dicoding.storyapp.utils.uriToFile
 import com.dicoding.storyapp.view.ViewModelFactory
 import com.dicoding.storyapp.view.main.MainActivity
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
@@ -30,13 +36,24 @@ import retrofit2.HttpException
 class AddStoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddStoryBinding
     private val viewModel: AddStoryViewModel by viewModels { ViewModelFactory.getInstance(this) }
-
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var currentImageUri: Uri? = null
+    private var currentLocation: Location? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        binding.locationCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                getCurrentLocation()
+            } else {
+                currentLocation = null
+            }
+        }
 
         binding.galleryButton.setOnClickListener {
             startGallery()
@@ -87,6 +104,17 @@ class AddStoryActivity : AppCompatActivity() {
         }
     }
 
+    private fun getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+            return
+        }
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            currentLocation = location
+        }
+    }
+
     private fun uploadStory() {
         val description = binding.edAddDescription.text.toString()
         if (currentImageUri == null) {
@@ -110,9 +138,16 @@ class AddStoryActivity : AppCompatActivity() {
             requestImageFile
         )
 
+        val lat = currentLocation?.latitude?.toFloat()
+        val lon = currentLocation?.longitude?.toFloat()
+
         lifecycleScope.launch {
             try {
-                viewModel.uploadStory(requestBody, multipartBody)
+                if (lat != null && lon != null) {
+                    viewModel.uploadStory(requestBody, multipartBody, lat, lon)
+                } else {
+                    viewModel.uploadStory(requestBody, multipartBody)
+                }
                 showToast(getString(R.string.upload_success))
                 val intent = Intent(this@AddStoryActivity, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -136,5 +171,9 @@ class AddStoryActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
 }

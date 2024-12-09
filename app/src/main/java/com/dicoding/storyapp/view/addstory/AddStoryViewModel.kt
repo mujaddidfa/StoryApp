@@ -10,4 +10,8 @@ class AddStoryViewModel(private val repository: StoryRepository) : ViewModel() {
     suspend fun uploadStory(description: RequestBody, photo: MultipartBody.Part): FileUploadResponse {
         return repository.uploadStory(description, photo)
     }
+
+    suspend fun uploadStory(description: RequestBody, photo: MultipartBody.Part, lat: Float, lon: Float): FileUploadResponse {
+        return repository.uploadStory(description, photo, lat, lon)
+    }
 }
