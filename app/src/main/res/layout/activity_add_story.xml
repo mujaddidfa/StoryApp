@@ -26,6 +26,7 @@
             android:id="@+id/previewImageView"
             android:layout_width="0dp"
             android:layout_height="240dp"
+            android:contentDescription="@string/preview_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -9,8 +9,6 @@
     <string name="message_login_page">Please enter your data first</string>
     <string name="title_login_page">Are you ready to upgrade your skills?</string>
     <string name="name">Name</string>
-    <string name="message_main_page">Happy Learning at Dicoding.</string>
-    <string name="greeting">Hello %1$s,</string>
     <string name="logout">Logout</string>
     <string name="story_image">Story Image</string>
     <string name="story_description">Story Description</string>
@@ -30,4 +28,5 @@
     <string name="password_lest_than_8_characters">Password must not be less than 8 characters</string>
     <string name="retry">Retry</string>
     <string name="use_current_location">User current location</string>
+    <string name="preview_image">Preview image</string>
 </resources>

@@ -81,6 +81,7 @@ class MainViewModelTest {
     }
 }
 
+@Suppress("SameReturnValue", "unused", "RedundantSuppression")
 class StoryPagingSource : PagingSource<Int, LiveData<List<ListStoryItem>>>() {
     companion object {
         fun snapshot(items: List<ListStoryItem>): PagingData<ListStoryItem> {

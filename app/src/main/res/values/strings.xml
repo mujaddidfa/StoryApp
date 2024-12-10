@@ -9,8 +9,6 @@
     <string name="message_login_page">Masukkan dulu datamu ya</string>
     <string name="title_login_page">Sudah siap untuk upgrade skill?</string>
     <string name="name">Nama</string>
-    <string name="message_main_page">Selamat Belajar di Dicoding.</string>
-    <string name="greeting">Halo %1$s,</string>
     <string name="logout">Keluar</string>
     <string name="story_image">Foto Story</string>
     <string name="story_description">Deskripsi Story</string>
@@ -31,11 +29,11 @@
     <string name="upload_failed">Story gagal diunggah, periksa koneksi internet Anda</string>
     <string name="password_lest_than_8_characters">Password tidak boleh kurang dari 8 karakter</string>
     <string name="title_activity_maps" translatable="false">Story Maps</string>
-    <string name="maps" translatable="false">Maps</string>
     <string name="retry">Coba lagi</string>
     <string name="normal_type" translatable="false">Normal</string>
     <string name="satellite_type" translatable="false">Satellite</string>
     <string name="terrain_type" translatable="false">Terrain</string>
     <string name="hybrid_type" translatable="false">Hybrid</string>
     <string name="use_current_location">Gunakan lokasi saat ini</string>
+    <string name="preview_image">Gambar tinjauan</string>
 </resources>

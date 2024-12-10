@@ -4,12 +4,4 @@
 
     <style name="Theme.StoryApp" parent="Base.Theme.StoryApp" />
 
-    <style name="Theme.StoryApp.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
-        <item name="appWidgetRadius">16dp</item>
-        <item name="appWidgetInnerRadius">8dp</item>
-    </style>
-
-    <style name="Theme.StoryApp.AppWidgetContainer" parent="Theme.StoryApp.AppWidgetContainerParent">
-        <item name="appWidgetPadding">16dp</item>
-    </style>
 </resources>
